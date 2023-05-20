@@ -1,0 +1,22 @@
+<!-- user_dashboard.html-->
+{% extends 'base.html' %}
+{% block title %}User Dashboard{% endblock title %}
+
+
+{% block content %}
+    <div class="container text-center">
+        <div class="row justify-content-center">
+            <div class="col-sm-12">
+                <h2>Welcome to the User Dashboard</h2>
+                <h4>The figure below shows your trading charts.</h4>
+                <div id="chart">
+                    {% if graph %}
+                        {{ graph|safe }}
+                    {% else %}
+                        <p>No graph was provided.</p>
+                    {% endif %}
+                </div>
+            </div>
+        </div>
+    </div>
+{% endblock content %}
