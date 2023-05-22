@@ -1,22 +1,22 @@
+from email.mime import image
 from django.contrib import messages
 from django.urls import reverse_lazy
 from django.contrib.auth.models import User
-from django.shortcuts import redirect, render
+from django.shortcuts import get_object_or_404, redirect, render
 from traders.forms import RegisterForm, LoginForm
 from traders.models import Trade
 from django.views import generic
 from django.contrib.auth import mixins
 from django.contrib.auth import logout, authenticate, login
-from plotly.offline import plot
-
+from django_plotly_dash import DjangoDash
+import plotly.graph_objs as go
 
 
 class RegisterAccountView(generic.CreateView):
     template_name = 'register.html'
     form_class = RegisterForm
-    model = User
-    success_url = reverse_lazy('user_dashboard')
-
+    success_url = reverse_lazy('user_login')
+    
 
 def user_login(request):
     form = LoginForm()
@@ -27,7 +27,6 @@ def user_login(request):
             username = form.cleaned_data["username"]
             password = form.cleaned_data["password"]
             user = authenticate(username=username, password=password)
-            print(f"USER TYPE: {user.is_superuser}")
             if user is not None:
                 if user.is_superuser:
                     login(request, user)
@@ -50,34 +49,48 @@ def user_logout(request):
 
 class UserDashboardView(mixins.LoginRequiredMixin, generic.TemplateView):
     template_name = 'user_dashboard.html'
+    redirect_field_name = reverse_lazy("user_login")
 
     def get_context_data(self, **kwargs):
+        timestamp = [] # timestamp list
+        profit_loss = [] # profit/loss list
         context = super().get_context_data(**kwargs)
-        trade = Trade.objects.get(trader_id=self.request.user.id)
-        context['balance'] = trade.balance
-        context['trader_name'] = trade.trader.username
-        context['timestamp'] = trade.timestamp
+        trade = Trade.objects.filter(trader=self.request.user).first()
+
+        for trades in trade.graph_data:
+            timestamp.append(trades["timestamp"])
+            profit_loss.append(trades["profit_loss"])
+        graph = {"timesstamp":timestamp, "profit_loss":profit_loss}
+
+        # Create a scatter plot with the timestamp and profit/loss data
+        data = go.Scatter(x=timestamp, y=profit_loss, mode='lines+markers', name='Profit/Loss')
+        layout = go.Layout(title='Real-Time Profit/Loss', xaxis=dict(title='Timestamp'), yaxis=dict(title='Profit/Loss'))
+        
+        # Create the figure and return it
+        fig = go.Figure(data=data, layout=layout)
+        graph = fig.to_html(full_html=False, default_height=700, default_width=1000)
+        context["graph"] = graph
         return context
 
 
-class AdminDashboardView(mixins.UserPassesTestMixin, generic.TemplateView):
+class AdminDashboardTradeListView(mixins.UserPassesTestMixin, generic.TemplateView):
     template_name = 'admin_dashboard.html'
+    queryset = Trade.objects.all()
 
     def test_func(self):
         return self.request.user.is_superuser
+    
 
+class AdminDashboardTradeDetailView(mixins.UserPassesTestMixin, generic.DetailView):
+    template_name = 'admin_dashboard.html'
+    queryset = Trade.objects.all()
+
+    def test_func(self):
+        return self.request.user.is_superuser
+    
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
-        trades = Trade.objects.all()
-        profit_loss_data = []
-
-        for trade in trades:
-            trade_data = {
-                'trader_name': trade.trader.username,
-                'timestamp':trade.timestamp,
-                'balance': trade.balance
-            }
-            profit_loss_data.append(trade_data)
-
-        context['profit_loss_data'] = profit_loss_data
+        trade = get_object_or_404(Trade, id=self.id)
+        context['balance'] = trade.balance
+        context['graph_data'] = trade.graph_data
         return context

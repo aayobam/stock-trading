@@ -1,5 +1,7 @@
 {% load static %}
 {% load crispy_forms_tags %}
+
+
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -51,8 +53,8 @@
             </div>
         {% endif %}
         {% block content %} {% endblock content %}
+        {% block javascript %}{% endblock javascript %}
 
         <script src="{% static './js/bootstrap.min.js' %}"></script>
-        <script src="https://cdn.plot.ly/plotly-latest.min.js"></script>
     </body>
 </html>

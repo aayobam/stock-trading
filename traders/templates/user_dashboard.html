@@ -9,14 +9,17 @@
             <div class="col-sm-12">
                 <h2>Welcome to the User Dashboard</h2>
                 <h4>The figure below shows your trading charts.</h4>
-                <div id="chart">
-                    {% if graph %}
-                        {{ graph|safe }}
-                    {% else %}
-                        <p>No graph was provided.</p>
-                    {% endif %}
-                </div>
+                <div id="graph" class"align-center"></div>
             </div>
         </div>
     </div>
 {% endblock content %}
+
+{% block javascript %}
+    <script>
+        var graphData = '{{ graph|safe }}';
+        var graphDiv = document.getElementById('graph');
+        graphDiv.innerHTML = graphData;
+    </script>
+    {% comment %} <script src="https://cdn.plot.ly/plotly-latest.min.js"></script> {% endcomment %}
+{% endblock javascript %}

@@ -1,5 +1,5 @@
 import os
-
+from celery.schedules import crontab
 from pathlib import Path
 
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
@@ -30,12 +30,19 @@ INSTALLED_APPS = [
 ]
 
 LOCAL_APPS = ['traders',]
-THIRD_PARTY_APPS = ['crispy_forms', 'crispy_bootstrap5',]
+THIRD_PARTY_APPS = ['crispy_forms', 'crispy_bootstrap5','django_celery_beat',]
 
 INSTALLED_APPS += LOCAL_APPS + THIRD_PARTY_APPS
 
 CRISPY_ALLOWED_TEMPLATE_PACKS = "bootstrap5"
 CRISPY_TEMPLATE_PACK = "bootstrap5"
+
+PLOTLY_RENDERER = 'django_plotly_dash.renderer.DashRenderer'
+PLOTLY_COMPONENTS = [
+    'dash_core_components',
+    'dash_html_components',
+    'dash_renderer',
+]
 
 MIDDLEWARE = [
     'django.middleware.security.SecurityMiddleware',
@@ -67,6 +74,18 @@ TEMPLATES = [
 
 WSGI_APPLICATION = 'config.wsgi.application'
 
+# Celery settings
+CELERY_BROKER_URL = "redis://localhost:6379"
+CELERY_RESULT_BACKEND = "redis://localhost:6379"
+CELERY_AACCEPT_CONTENT = ['json']
+CELERY_TASK_SERIALIZER = 'json'
+
+CELERY_BEAT_SCHEDULE = {
+    "simulate_trade": {
+        "task": "traders.tasks.simulate_trade_task",
+        "schedule": crontab(minute="*/1"),
+    },
+}
 
 # Database
 # https://docs.djangoproject.com/en/4.0/ref/settings/#databases
