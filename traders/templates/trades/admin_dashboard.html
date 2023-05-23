@@ -7,17 +7,19 @@
     <div class="container text-center">
         <div class="row justify-content-center">
             <h1>Welcome to admin dashboard</h1>
-            <h3>The figure below shows your trading graph.</h3>
             <select name="trade-id"
-                    class="form-control"
-                    hx-get="{% url 'admin_user' %}"
-                    hx-trigger="change"
-                    hx-target="#graph">
-                {% for trade in trade_list %}
+                    class="form-control w-50"
+                    hx-get="{% url 'admin_graph' %}"
+                    hx-trigger="every 10s change"
+                    hx-swap="#graph"
+                    hx-target="#graph"
+                    hx-indicator="#indicator">
+                {% for trade in trades %}
                     <option value="{{ trade.id }}">{{ trade.trader.email }} {{ trade.balance }}</option>
                 {% endfor %}
             </select>
-            <div class="" id="graph">
+
+            <div class="col-sm-12 justify-content-center" id="">
                 {% include "partial/admin_graph.html" %}
             </div>
         </div>

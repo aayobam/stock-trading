@@ -1,5 +1,6 @@
 <!-- user_dashboard.html-->
 {% extends 'base.html' %}
+{% load static %}
 {% block title %}User Dashboard{% endblock title %}
 
 
@@ -8,9 +9,17 @@
         <div class="row justify-content-center">
             <div class="col-sm-12">
                 <h2>Welcome to the User Dashboard</h2>
-                <h4>The figure below shows your trading charts.</h4>
-                <div id="graph" class"align-center"></div>
+                <div 
+                    hx-get="{% url 'user_graph' %}"
+                    hx-trigger="every 10s change"
+                    hx-target="#graph">
+                </div>
             </div>
+
+            <div class="col-sm-12 justify-content-center" id="">
+                {% include "partial/user_graph.html" %}
+            </div>
+
         </div>
     </div>
 {% endblock content %}

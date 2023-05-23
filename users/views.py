@@ -24,8 +24,8 @@ def user_login(request):
             if user is not None:
                 if user.is_superuser:
                     login(request, user)
-                    if "next" in request.POST:
-                        return redirect(request.POST.get("next"))
+                    # if "next" in request.POST:
+                    #     return redirect(request.POST.get("next"))
                     messages.success(request, "login success. welcome admin")
                     return redirect("admin_dashboard")
                 login(request, user)

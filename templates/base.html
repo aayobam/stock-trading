@@ -53,15 +53,9 @@
             </div>
         {% endif %}
         {% block content %} {% endblock content %}
-
-        <script>
-            var graphData = '{{ graph|safe }}';
-            var graphDiv = document.getElementById('graph');
-            graphDiv.innerHTML = graphData;
-        </script>
         
+        <script src="{% static './js/htmx.min.js' %}"></script>
         <script src="https://cdn.plot.ly/plotly-latest.min.js"></script>
         <script src="{% static './js/bootstrap.min.js' %}"></script>
-        <script src="{% static './js/htmx.min.js' %}"></script>
     </body>
 </html>
