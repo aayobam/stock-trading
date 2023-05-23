@@ -29,11 +29,14 @@ class Command(BaseCommand):
                 data_entries = []
                 trade.balance = Decimal(str(trade.balance))
                 profit_loss = Decimal(random.randint(-10, 10))
+
                 if trade.balance == Decimal('0.00') or trade.balance < abs(profit_loss):
                     # Trading stops for an account with zero balanace or less then the profit_loss
                     continue
+
                 elif trade.trader.is_superuser or trade.trader.is_staff:
                     continue
+                
                 trade.balance += profit_loss # adds profit or deduct loss from account balance.
                 trade_data = {
                     "trader_name": str(trade.trader),

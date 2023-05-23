@@ -24,6 +24,7 @@ class CustomUser(TimeStampedModel, AbstractBaseUser, PermissionsMixin):
     class Meta:
         verbose_name = "User"
         verbose_name_plural = "Users"
+        ordering = ('-last_name',)
     
     def get_full_name(self):
         return f"{self.first_name.capitalize()} {self.last_name.capitalize()}"

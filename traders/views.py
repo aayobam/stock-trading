@@ -1,13 +1,10 @@
-from django_plotly_dash import DjangoDash
 import plotly.graph_objs as go
-from django.shortcuts import get_object_or_404, render
 from django.views import generic
 from django.contrib.auth import mixins
 from traders.models import Trade
-from django.contrib.auth.decorators import login_required
 
 
-
+# User dashboard landing page
 class UserDashboardView(mixins.LoginRequiredMixin, generic.TemplateView):
     template_name = 'trades/user_dashboard.html'
     def get_context_data(self, **kwargs):
@@ -23,18 +20,19 @@ class UserDashboardView(mixins.LoginRequiredMixin, generic.TemplateView):
         # Create a scatter plot with the timestamp and profit/loss data
         data = go.Scatter(x=timestamp, y=profit_loss, mode='lines+markers', name='Profit/Loss')
         layout = go.Layout(
-            title='Real-Time Profit/Loss',
+            title=f'Real-Time Profit/Loss.Your available balance is ${trade.balance}', 
             xaxis=dict(title='Timestamp'),
             yaxis=dict(title='Profit/Loss')
         )
         
         # Create the figure and return it
         fig = go.Figure(data=data, layout=layout)
-        graph = fig.to_html(full_html=False, default_height=700, default_width=1000)
+        graph = fig.to_html(full_html=False, default_height=600, default_width=1000)
         context["graph"] = graph
         return context
 
 
+# User real time graph page
 class UserDashboardGraphView(mixins.LoginRequiredMixin, generic.TemplateView):
     template_name = 'partial/user_graph.html'
 
@@ -51,18 +49,19 @@ class UserDashboardGraphView(mixins.LoginRequiredMixin, generic.TemplateView):
         # Create a scatter plot with the timestamp and profit/loss data
         data = go.Scatter(x=timestamp, y=profit_loss, mode='lines+markers', name='Profit/Loss')
         layout = go.Layout(
-            title='Real-Time Profit/Loss',
+            title=f'Real-Time Profit/Loss.Your available balance is ${trade.balance}',
             xaxis=dict(title='Timestamp'),
             yaxis=dict(title='Profit/Loss')
         )
         
         # Create the figure and return it
         fig = go.Figure(data=data, layout=layout)
-        graph = fig.to_html(full_html=False, default_height=700, default_width=1000)
+        graph = fig.to_html(full_html=False, default_height=600, default_width=1000)
         context["graph"] = graph
         return context
 
 
+# Admin dashboard landing page
 class AdminDashboardTradeListView(mixins.UserPassesTestMixin, generic.TemplateView):
     template_name = 'trades/admin_dashboard.html'
 
@@ -71,11 +70,36 @@ class AdminDashboardTradeListView(mixins.UserPassesTestMixin, generic.TemplateVi
     
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
+        timestamp = [] # timestamp list
+        profit_loss = [] # profit/loss list
+
+        trade_id = self.request.GET.get("trade-id", "")
+        print(f"INITIAL TRADE ID ON FETCH: {trade_id}")
+        trade_obj = Trade.objects.filter(id__icontains=trade_id).first()
+ 
+        for graph_data in trade_obj.graph_data:
+            timestamp.append(graph_data["timestamp"])
+            profit_loss.append(graph_data["profit_loss"])
+
+        # Create a scatter plot with the timestamp and profit/loss data
+        data = go.Scatter(x=timestamp, y=profit_loss, mode='lines+markers', name='Profit/Loss')
+        layout = go.Layout(
+            title=f'Real-Time Profit/Loss for {trade_obj.trader} ${trade_obj.balance}', 
+            xaxis=dict(title='Timestamp'),
+            yaxis=dict(title='Profit/Loss')
+        )
+        
+        # Create the figure and return it
+        fig = go.Figure(data=data, layout=layout)
+        graph = fig.to_html(full_html=False, default_height=600, default_width=1000)
+
         trades = Trade.objects.all()
         context["trades"] = trades
+        context["graph"] = graph
         return context
 
 
+#Admin dashboard real time graph page
 class AdminDashboardGraphView(mixins.UserPassesTestMixin, generic.TemplateView):
     template_name = 'partial/admin_graph.html'
 
@@ -102,12 +126,12 @@ class AdminDashboardGraphView(mixins.UserPassesTestMixin, generic.TemplateView):
         layout = go.Layout(
             title=f'Real-Time Profit/Loss for {trade_obj.trader} ${trade_obj.balance}', 
             xaxis=dict(title='Timestamp'),
-            yaxis=dict(title='Profit/Loss', range=[-10, 10])
+            yaxis=dict(title='Profit/Loss')
         )
         
         # Create the figure and return it
         fig = go.Figure(data=data, layout=layout)
-        graph = fig.to_html(full_html=False, default_height=700, default_width=1000)
+        graph = fig.to_html(full_html=False, default_height=600, default_width=1000)
 
         context["graph"] = graph
         return context

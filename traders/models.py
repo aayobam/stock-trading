@@ -15,7 +15,7 @@ class Trade(TimeStampedModel):
     class Meta:
         verbose_name = "Trade"
         verbose_name_plural = "Trades"
-        ordering = ['trader__email']
+        ordering = ('-trader__email',)
 
     def __str__(self) -> str:
         return self.trader.email
