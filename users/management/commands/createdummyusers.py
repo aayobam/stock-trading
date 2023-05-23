@@ -1,6 +1,5 @@
-from typing import Any, Optional
-from django.core.management import BaseCommand, CommandError
-from django.contrib.auth.models import User
+from django.core.management import BaseCommand
+from users.models import CustomUser
 import time
 
 
@@ -11,17 +10,16 @@ class Command(BaseCommand):
     def handle(self, *args, **options) :
         first_name = "test"
         last_name="user"
-        username = first_name + last_name
+        email = first_name + last_name
         password = "password"
         for count in range(1, 11):
-            if User.objects.filter(username=username+str(count)).exists():
-                self.stdout.write(self.style.WARNING(f"account for {username+str(count)} already exists."))
+            if CustomUser.objects.filter(email=email+str(count)+"@mail.com").exists():
+                self.stdout.write(self.style.WARNING(f"account for {email+str(count)+'@mail.com'} already exists."))
                 continue
-            user = User.objects.create_user(
+            user = CustomUser.objects.create_user(
                 first_name=first_name,
                 last_name=last_name+str(count),
-                username=username+str(count),
-                email=username+str(count)+"@mail.com",
+                email=email+str(count)+"@mail.com",
                 password=password+str(count)
             )
             user.is_active = True

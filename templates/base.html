@@ -33,7 +33,7 @@
                     {% else %}
                         <ul class="navbar-nav me-auto mb-2 mb-lg-0">
                             <li class="nav-item">
-                                <a class="nav-link active" aria-current="page" href="{% url 'register' %}">Register</a>
+                                <a class="nav-link active" aria-current="page" href="{% url 'create_account' %}">Register</a>
                             </li>
                             <li class="nav-item">
                                 <a class="nav-link" href="{% url 'user_login' %}">Login</a>
@@ -46,15 +46,22 @@
         {% if messages %}
             <div class="row">
                 {% for message in messages %}
-                    <div class="col-sm-8 alert alert-{{message.tag}} alert-dismissible fade shows">
+                    <div class="col-sm-8 alert alert-{{message.tags}} alert-dismissible fade shows">
                         {{ message }}
                     </div>
                 {% endfor %}
             </div>
         {% endif %}
         {% block content %} {% endblock content %}
-        {% block javascript %}{% endblock javascript %}
 
+        <script>
+            var graphData = '{{ graph|safe }}';
+            var graphDiv = document.getElementById('graph');
+            graphDiv.innerHTML = graphData;
+        </script>
+        
+        <script src="https://cdn.plot.ly/plotly-latest.min.js"></script>
         <script src="{% static './js/bootstrap.min.js' %}"></script>
+        <script src="{% static './js/htmx.min.js' %}"></script>
     </body>
 </html>

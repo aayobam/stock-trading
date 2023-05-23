@@ -29,7 +29,7 @@ INSTALLED_APPS = [
     'django.contrib.staticfiles',
 ]
 
-LOCAL_APPS = ['traders',]
+LOCAL_APPS = ['users','traders']
 THIRD_PARTY_APPS = ['crispy_forms', 'crispy_bootstrap5','django_celery_beat',]
 
 INSTALLED_APPS += LOCAL_APPS + THIRD_PARTY_APPS
@@ -141,5 +141,7 @@ STATICFILES_DIRS = (os.path.join(BASE_DIR / 'static'),)
 
 # Default primary key field type
 # https://docs.djangoproject.com/en/4.0/ref/settings/#default-auto-field
+
+AUTH_USER_MODEL = 'users.CustomUser'
 
 DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
