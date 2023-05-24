@@ -4,14 +4,22 @@ from django.contrib import messages
 from django.urls import reverse_lazy
 from django.contrib.auth import logout, authenticate, login
 from .forms import RegisterForm, LoginForm
+from .decorators import is_authenticated
+from django.utils.decorators import method_decorator
 
 
+@method_decorator(is_authenticated, name="dispatch")
 class RegisterAccountView(generic.CreateView):
     template_name = 'users/register.html'
     form_class = RegisterForm
     success_url = reverse_lazy('user_login')
+
+    def form_valid(self, form):
+        messages.success(self.request, "registration successful")
+        return super().form_valid(form)
     
 
+@is_authenticated
 def user_login(request):
     form = LoginForm()
     template_name = "users/login.html"

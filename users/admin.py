@@ -28,8 +28,6 @@ class CustomUserAdmin(UserAdmin):
                     "is_staff",
                     "is_superuser",
                     "user_permissions",
-                    "created_on",
-                    "updated_on"
                 ),
             },
         ),
@@ -49,8 +47,6 @@ class CustomUserAdmin(UserAdmin):
                     "is_staff",
                     "is_superuser",
                     "user_permissions",
-                    "created_on",
-                    "updated_on"
                 ),
             },
         ),

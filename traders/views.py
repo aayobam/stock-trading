@@ -2,15 +2,19 @@ import plotly.graph_objs as go
 from django.views import generic
 from django.contrib.auth import mixins
 from traders.models import Trade
+from django.urls import reverse_lazy
+
 
 
 # User dashboard landing page
 class UserDashboardView(mixins.LoginRequiredMixin, generic.TemplateView):
     template_name = 'trades/user_dashboard.html'
+    success_url = reverse_lazy('user_login')
+
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
-        timestamp = [] # timestamp list
-        profit_loss = [] # profit/loss list
+        timestamp = [] # timestamp list: appends all the timestaps in the object's graph_data field.
+        profit_loss = [] # profit/loss list: appends all the profit/loss in the object's graph_data field.
         trade = Trade.objects.filter(trader=self.request.user).first()
 
         for trades in trade.graph_data:
@@ -25,21 +29,22 @@ class UserDashboardView(mixins.LoginRequiredMixin, generic.TemplateView):
             yaxis=dict(title='Profit/Loss')
         )
         
-        # Create the figure and return it
+        # Create the figure and return itto the template
         fig = go.Figure(data=data, layout=layout)
         graph = fig.to_html(full_html=False, default_height=600, default_width=1000)
         context["graph"] = graph
         return context
 
 
-# User real time graph page
+# User real time trade graph view.
 class UserDashboardGraphView(mixins.LoginRequiredMixin, generic.TemplateView):
     template_name = 'partial/user_graph.html'
+    success_url = reverse_lazy('user_login')
 
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
-        timestamp = [] # timestamp list
-        profit_loss = [] # profit/loss list
+        timestamp = [] # timestamp list: appends all the timestaps in the object's graph_data field.
+        profit_loss = [] # profit/loss list: appends all the profit/loss in the object's graph_data field.
         trade = Trade.objects.filter(trader=self.request.user).first()
 
         for trades in trade.graph_data:
@@ -62,7 +67,7 @@ class UserDashboardGraphView(mixins.LoginRequiredMixin, generic.TemplateView):
 
 
 # Admin dashboard landing page
-class AdminDashboardTradeListView(mixins.UserPassesTestMixin, generic.TemplateView):
+class AdminDashboardTradeListView(mixins.LoginRequiredMixin, mixins.UserPassesTestMixin, generic.TemplateView):
     template_name = 'trades/admin_dashboard.html'
 
     def test_func(self):
@@ -70,12 +75,14 @@ class AdminDashboardTradeListView(mixins.UserPassesTestMixin, generic.TemplateVi
     
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
-        timestamp = [] # timestamp list
-        profit_loss = [] # profit/loss list
+        timestamp = [] # timestamp list: appends all the timestaps in the object's graph_data field.
+        profit_loss = [] # profit/loss list: appends all the profit/loss in the object's graph_data field.
 
         trade_id = self.request.GET.get("trade-id", "")
-        print(f"INITIAL TRADE ID ON FETCH: {trade_id}")
-        trade_obj = Trade.objects.filter(id__icontains=trade_id).first()
+        try:
+            trade_obj = Trade.objects.filter(id__icontains=trade_id).first()
+        except:
+            trade_obj = None
  
         for graph_data in trade_obj.graph_data:
             timestamp.append(graph_data["timestamp"])
@@ -100,7 +107,7 @@ class AdminDashboardTradeListView(mixins.UserPassesTestMixin, generic.TemplateVi
 
 
 #Admin dashboard real time graph page
-class AdminDashboardGraphView(mixins.UserPassesTestMixin, generic.TemplateView):
+class AdminDashboardGraphView(mixins.LoginRequiredMixin, mixins.UserPassesTestMixin, generic.TemplateView):
     template_name = 'partial/admin_graph.html'
 
     def test_func(self):
@@ -109,8 +116,8 @@ class AdminDashboardGraphView(mixins.UserPassesTestMixin, generic.TemplateView):
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
 
-        timestamp = [] # timestamp list
-        profit_loss = [] # profit/loss list
+        timestamp = [] # timestamp list: appends all the timestaps in the object's graph_data field.
+        profit_loss = [] # profit/loss list: appends all the profit/loss in the object's graph_data field.
 
         trade_id = self.request.GET.get("trade-id", "")
         #trade_obj = Trade.objects.get(id=trade_id)

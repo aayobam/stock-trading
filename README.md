@@ -33,3 +33,8 @@ celery -A config worker -l info -B
 > Note1: the username:password format goes thus.
 - testuser1:password1
 > Note2: the program excludes admin or staffs from trading.
+
+> Slides Url
+```
+https://docs.google.com/presentation/d/1alnFhcrUuTsS41aLq7Y0_sghLiTu1fWy/edit?usp=sharing&ouid=111149320986178979518&rtpof=true&sd=true
+```
