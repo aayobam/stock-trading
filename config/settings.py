@@ -13,7 +13,7 @@ BASE_DIR = Path(__file__).resolve().parent.parent
 
 # SECURITY WARNING: keep the secret key used in production secret!
 DEBUG = False
-SECRET_KEY = env('SECRET_KEY')
+SECRET_KEY = os.environ.get('SECRET_KEY')
 
 # Quick-start development settings - unsuitable for production
 # See https://docs.djangoproject.com/en/4.0/howto/deployment/checklist/
@@ -81,7 +81,7 @@ MESSAGE_TAGS = {
     message_constants.ERROR: 'danger',
 }
 
-ALLOWED_HOSTS = ['localhost', '127.0.0.1']
+ALLOWED_HOSTS = ['*']
 
 # Database
 # https://docs.djangoproject.com/en/4.0/ref/settings/#databases
@@ -112,8 +112,8 @@ LOGGING = {
     },
 }
 
-if not DEBUG:
-    ALLOWED_HOSTS=['https://stock-trading.up.railway.app']
+if DEBUG == False:
+    ALLOWED_HOSTS=['https://stock-trading.up.railway.app', '127.0.0.1']
     CSRF_TRUSTED_ORIGINS = ['https://stock-trading.up.railway.app']
 
 
