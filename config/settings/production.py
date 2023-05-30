@@ -1,11 +1,12 @@
 from .base import *
 
 
+ROOT_URLCONF = 'config.urls'
 # SECURITY WARNING: keep the secret key used in production secret!
 SECRET_KEY = env('SECRET_KEY')
 
 # Security
-DEBUG = True
+DEBUG = False
 ALLOWED_HOSTS=['https://stock-trading.up.railway.app', '127.0.0.1']
 CSRF_TRUSTED_ORIGINS = ['https://stock-trading.up.railway.app']
 
@@ -15,11 +16,10 @@ CSRF_TRUSTED_ORIGINS = ['https://stock-trading.up.railway.app']
 DATABASES = {
     'default': {
         'ENGINE': 'djongo',
-        #'CLIENT': MongoClient(os.environ.get('MONGO_URL'),),
         'NAME': os.environ.get("DATABASENAME"),
         'HOST':os.environ.get('MONGOHOST'),
         'USER': os.environ.get('MONGOUSER'),
-        'PASSWORD': os.environ.get('MONGOUSER'),
+        'PASSWORD': os.environ.get('MONGOPASSWORD'),
         'PORT': os.environ.get('MONGOPORT'),
         'OPTIONS': {
             'CLIENT': os.environ.get('MONGO_URL'),
