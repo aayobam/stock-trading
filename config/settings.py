@@ -81,7 +81,7 @@ MESSAGE_TAGS = {
     message_constants.ERROR: 'danger',
 }
 
-ALLOWED_HOSTS = ['*']
+ALLOWED_HOSTS = ['127.0.0.1', 'stock-trading.up.railway.app']
 
 # Database
 # https://docs.djangoproject.com/en/4.0/ref/settings/#databases
@@ -113,7 +113,7 @@ LOGGING = {
 }
 
 if DEBUG == False:
-    ALLOWED_HOSTS=['https://stock-trading.up.railway.app', '127.0.0.1']
+    ALLOWED_HOSTS=['https://stock-trading.up.railway.app']
     CSRF_TRUSTED_ORIGINS = ['https://stock-trading.up.railway.app']
 
 
