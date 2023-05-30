@@ -7,6 +7,7 @@ from django.contrib.messages import constants as message_constants
 
 env = environ.Env()
 environ.Env.read_env()
+
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
 BASE_DIR = Path(__file__).resolve().parent.parent.parent
 
@@ -51,7 +52,9 @@ MIDDLEWARE = [
     'django.middleware.clickjacking.XFrameOptionsMiddleware',
 ]
 
-ROOT_URLCONF = 'config.urls'
+#ROOT_URLCONF = 'config.urls'
+
+ROOT_URLCONF = env("ROOT_URLCONF")
 
 TEMPLATES = [
     {
