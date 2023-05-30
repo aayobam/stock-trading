@@ -4,6 +4,7 @@ import time
 
 
 
+# Automatic creation of dummy users for trade simulation.
 class Command(BaseCommand):
     help = "auto creates dummy users for trading simulation"
 

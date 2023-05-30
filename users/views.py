@@ -39,7 +39,7 @@ def user_login(request):
                 login(request, user)
                 messages.success(request, "login success.")
                 return redirect("user_dashboard")
-            messages.error(request, "invlaid credentials")
+            messages.error(request, "invalid credentials")
             return redirect("user_login")
     context = {"form":form}
     return render(request, template_name, context)
@@ -47,5 +47,5 @@ def user_login(request):
 
 def user_logout(request):
     logout(request)
-    messages.success(request, "logut success.")
+    messages.success(request, "logout success.")
     return redirect('user_login')
