@@ -113,7 +113,7 @@ LOGGING = {
 }
 
 if DEBUG == False:
-    ALLOWED_HOSTS=['https://stock-trading.up.railway.app']
+    ALLOWED_HOSTS=['stock-trading.up.railway.app']
     CSRF_TRUSTED_ORIGINS = ['https://stock-trading.up.railway.app']
 
 
