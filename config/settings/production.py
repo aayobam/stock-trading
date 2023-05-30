@@ -1,9 +1,9 @@
 from .base import *
-from pymongo import MongoClient
 
 
 # SECURITY WARNING: keep the secret key used in production secret!
 SECRET_KEY = env('SECRET_KEY')
+
 # Security
 DEBUG = False
 ALLOWED_HOSTS=['https://stock-trading.up.railway.app', '127.0.0.1']
