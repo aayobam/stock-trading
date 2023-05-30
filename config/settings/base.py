@@ -4,20 +4,14 @@ from pathlib import Path
 from django.contrib.messages import constants as message_constants
 
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
-BASE_DIR = Path(__file__).resolve().parent.parent
+BASE_DIR = Path(__file__).resolve().parent.parent.parent
 
 
 # Quick-start development settings - unsuitable for production
 # See https://docs.djangoproject.com/en/4.0/howto/deployment/checklist/
 
 # SECURITY WARNING: keep the secret key used in production secret!
-SECRET_KEY = 'django-insecure-hvvm92gsf^yu3x=0b6x4833q=1owpiny#7&_hy2f%3l5v7c3+u'
-
-# SECURITY WARNING: don't run with debug turned on in production!
-DEBUG = True
-
-ALLOWED_HOSTS = ['*']
-
+SECRET_KEY = os.environ.get('DJANGO_SECRET_KEY')
 
 # Application definition
 
@@ -95,16 +89,6 @@ CELERY_BEAT_SCHEDULE = {
         "task": "traders.tasks.simulate_trade_task",
         "schedule": crontab(minute="*/1"),
     },
-}
-
-# Database
-# https://docs.djangoproject.com/en/4.0/ref/settings/#databases
-
-DATABASES = {
-    'default': {
-        'ENGINE': 'djongo',
-        'NAME': 'traders-db',
-    }
 }
 
 
