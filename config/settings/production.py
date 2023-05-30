@@ -5,7 +5,7 @@ from .base import *
 SECRET_KEY = env('SECRET_KEY')
 
 # Security
-DEBUG = False
+DEBUG = True
 ALLOWED_HOSTS=['https://stock-trading.up.railway.app', '127.0.0.1']
 CSRF_TRUSTED_ORIGINS = ['https://stock-trading.up.railway.app']
 
