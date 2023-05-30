@@ -1,7 +1,6 @@
 from .base import *
 
 
-ROOT_URLCONF = 'config.urls'
 # SECURITY WARNING: keep the secret key used in production secret!
 SECRET_KEY = env('SECRET_KEY')
 
@@ -32,6 +31,7 @@ DATABASES = {
 LOGGING = {
     "version": 1,
     "disable_existing_loggers": False,
+
     "formatters": {
         "verbose": {
             "format": "{levelname} {asctime} {module} {message}",
@@ -51,7 +51,9 @@ LOGGING = {
             "formatter": "verbose",
         },
     },
+    
     "root": {"level": "INFO", "handlers": ['my_log_handler', "console"]},
+
     'loggers': {
         'django': {
             'handlers': ['my_log_handler', 'console'],

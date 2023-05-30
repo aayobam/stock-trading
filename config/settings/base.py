@@ -1,14 +1,14 @@
 import os
+from pathlib import Path
 import environ
 from celery.schedules import crontab
-from pathlib import Path
 from django.contrib.messages import constants as message_constants
+
 
 env = environ.Env()
 environ.Env.read_env()
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
 BASE_DIR = Path(__file__).resolve().parent.parent.parent
-
 
 # Quick-start development settings - unsuitable for production
 # See https://docs.djangoproject.com/en/4.0/howto/deployment/checklist/
@@ -25,19 +25,17 @@ INSTALLED_APPS = [
 ]
 
 LOCAL_APPS = ['users','traders']
-THIRD_PARTY_APPS = ['crispy_forms', 'crispy_bootstrap5','django_celery_beat',]
+THIRD_PARTY_APPS = ['crispy_forms', 'crispy_bootstrap5', 'django_celery_beat',]
 
 INSTALLED_APPS += LOCAL_APPS + THIRD_PARTY_APPS
 
+# Crispy form confguration.
 CRISPY_ALLOWED_TEMPLATE_PACKS = "bootstrap5"
 CRISPY_TEMPLATE_PACK = "bootstrap5"
 
+# Plotly configuration
 PLOTLY_RENDERER = 'django_plotly_dash.renderer.DashRenderer'
-PLOTLY_COMPONENTS = [
-    'dash_core_components',
-    'dash_html_components',
-    'dash_renderer',
-]
+PLOTLY_COMPONENTS = ['dash_core_components', 'dash_html_components', 'dash_renderer']
 
 MIDDLEWARE = [
     'django.middleware.security.SecurityMiddleware',
