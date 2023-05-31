@@ -123,12 +123,12 @@ if DEBUG == False:
         'default': {
             'ENGINE': 'djongo',
             'NAME': os.environ.get("DATABASENAME"),
-            'HOST':os.environ.get('MONGOHOST'),
-            'USER': os.environ.get('MONGOUSER'),
-            'PASSWORD': os.environ.get('MONGOPASSWORD'),
-            'PORT': os.environ.get('MONGOPORT'),
             'OPTIONS': {
                 'CLIENT': os.environ.get('MONGO_URL'),
+                'HOST':os.environ.get('MONGOHOST'),
+                'USER': os.environ.get('MONGOUSER'),
+                'PASSWORD': os.environ.get('MONGOPASSWORD'),
+                'PORT': os.environ.get('MONGOPORT'),
                 'ssl': True,
                 'conn_max_age':1800
             }
