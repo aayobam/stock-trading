@@ -131,7 +131,16 @@ if DEBUG == False:
                 'PORT': os.environ.get('MONGOPORT'),
                 'ssl': True,
                 'conn_max_age':1800
-            }
+            },
+            'LOGGING': {
+                'version': 1,
+                'loggers': {
+                    'djongo': {
+                        'level': 'DEBUG',
+                        'propagate': False,                        
+                    }
+                },
+            },
         }
     }
 
