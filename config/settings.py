@@ -127,28 +127,15 @@ DATABASES = {
 }
 
 if DEBUG == False:
-    ALLOWED_HOSTS=['stock-trading.up.railway.app']
+    ALLOWED_HOSTS = ['stock-trading.up.railway.app']
+    RENDER_EXTERNAL_HOSTNAME = os.environ.get('RENDER_EXTERNAL_HOSTNAME')
+    if RENDER_EXTERNAL_HOSTNAME:
+        ALLOWED_HOSTS.append(RENDER_EXTERNAL_HOSTNAME)
+
     CSRF_TRUSTED_ORIGINS = ['https://stock-trading.up.railway.app']
 
-
-    # Database
-    # https://docs.djangoproject.com/en/4.0/ref/settings/#databases
-    # DATABASES = {
-    #     'default': {
-    #         'ENGINE': 'django.db.backends.mysql',
-    #         'NAME': os.environ.get("MYSQLDATABASE"),
-    #         'USER': os.environ.get('MYSQLUSER'),
-    #         'PASSWORD': os.environ.get('MYSQLPASSWORD'),
-    #         'HOST': os.environ.get('MYSQLHOST'),
-    #         'PORT': int(os.environ.get('MYSQLPORT')),
-    #         'CLIENT':{
-    #             'MYSQL_URL': os.environ.get('MYSQL_URL'),
-    #             'connection_timeout': 1800
-    #         }
-    #     }
-    # }
     DATABASES = {
-        'default': dj_database_url.config(default=os.environ.get('MYSQL_URL'))
+        'default': dj_database_url.config(default=os.environ.get('MYSQL_URL'), conn_max_age=600)
     }
 
     LOGGING = {
@@ -186,8 +173,8 @@ if DEBUG == False:
         },
     }
 
+    # Default static file renderer
     STATIC_ROOT = os.path.join(BASE_DIR, 'staticfiles')
-    # default static file renderer
     STATICFILES_STORAGE = 'whitenoise.storage.CompressedManifestStaticFilesStorage'
 
 # Celery settings

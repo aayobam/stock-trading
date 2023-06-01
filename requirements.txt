@@ -21,6 +21,7 @@ mysqlclient==2.1.1
 packaging==23.1
 plotly==5.14.1
 prompt-toolkit==3.0.38
+psycopg2-binary==2.9.5
 python-crontab==2.7.1
 python-dateutil==2.8.2
 pytz==2023.3

@@ -1,0 +1,23 @@
+databases:
+  - name: stock-trading-postgres
+    databaseName: stocktraders_db
+    user: stocktraders
+
+services:
+  - type: web
+    name: stock-trading
+    env: python
+    buildCommand: "./build.sh"
+    startCommand: "gunicorn config.wsgi:application"
+    envVars:
+      - key: DATABASE_URL
+        fromDatabase:
+          name: stock-trading-postgres
+          property: postgres://stocktraders:Ldtr39I1uKC0mBZERXQXVDZEP67whV5N@dpg-chscjfbhp8u4o31fe970-a/stocktraders_db
+      - key: SECRET_KEY
+        generateValue: true
+      - key: WEB_CONCURRENCY
+        value: 4
+  - name: worker
+    type: web
+    env:  celery -A config worker -l info -B
