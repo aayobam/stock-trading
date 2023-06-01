@@ -16,4 +16,5 @@ class Command(BaseCommand):
             password="adminpassword"
         )
         admin_user.set_password("adminpassword")
+        admin_user.save()
         self.stdout.write(self.style.SUCCESS(f"Admin {admin_user.email} created"))

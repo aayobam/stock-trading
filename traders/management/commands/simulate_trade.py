@@ -3,8 +3,7 @@ import random
 import json, decimal
 from decimal import Decimal
 from datetime import datetime
-from django.shortcuts import get_object_or_404
-from django.core.management import BaseCommand, CommandError
+from django.core.management import BaseCommand
 from traders.models import Trade
 
 
@@ -37,12 +36,12 @@ class Command(BaseCommand):
                     continue
                 
                 # excludes staff or admin profiles from trading
-                elif trade.trader.is_superuser or trade.trader.is_staff:
+                elif trade.user.is_superuser or trade.user.is_staff:
                     continue
                 
                 trade.balance += profit_loss # Adds profit or deduct loss from account balance.
                 trade_data = {
-                    "trader_name": str(trade.trader),
+                    "trader_name": str(trade.user),
                     "balance": trade.balance,
                     "profit_loss": profit_loss,
                     "timestamp": str(datetime.now())
@@ -56,5 +55,5 @@ class Command(BaseCommand):
                 data_entries.append(data_list)
                 trade.graph_data += data_entries 
                 trade.save()
-                self.stdout.write(self.style.SUCCESS(f'Successfully simulated trade {trade.trader} {data_list}'))
+                self.stdout.write(self.style.SUCCESS(f'Successfully simulated trade {trade.user} {data_list}'))
             time.sleep(60)

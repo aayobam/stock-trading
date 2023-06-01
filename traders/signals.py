@@ -9,8 +9,8 @@ from .models import Trade
 def create_or_update_trade(sender, instance, created, **kwargs):
     if created:
         balance = Decimal(str(100))
-        Trade.objects.create(trader=instance, balance=balance)
+        Trade.objects.create(user=instance, balance=balance)
     else:
-        trade = Trade.objects.get(trader=instance)
+        trade = Trade.objects.get(user=instance)
         trade.balance = Decimal(str(100))
         trade.save()
