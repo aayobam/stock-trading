@@ -126,7 +126,7 @@ DATABASES = {
     }
 }
 
-if not DEBUG:
+if DEBUG == False:
     ALLOWED_HOSTS=['stock-trading.up.railway.app']
     CSRF_TRUSTED_ORIGINS = ['https://stock-trading.up.railway.app']
 
