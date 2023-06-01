@@ -7,7 +7,7 @@ services:
   - type: web
     name: stock-trading
     env: python
-    buildCommand: "./build.sh"
+    buildCommand: bash build.sh
     startCommand: "gunicorn config.wsgi:application"
     envVars:
       - key: DATABASE_URL
