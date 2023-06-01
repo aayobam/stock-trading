@@ -3,7 +3,7 @@ from pathlib import Path
 import environ
 from celery.schedules import crontab
 from django.contrib.messages import constants as message_constants
-
+import dj_database_url
 
 env = environ.Env()
 environ.Env.read_env()
@@ -12,7 +12,7 @@ environ.Env.read_env()
 BASE_DIR = Path(__file__).resolve().parent.parent
 
 # SECURITY WARNING: keep the secret key used in production secret!
-DEBUG = False
+DEBUG = os.environ.get("DEBUG", False)
 SECRET_KEY = os.environ.get('SECRET_KEY')
 
 # Quick-start development settings - unsuitable for production
@@ -112,36 +112,43 @@ LOGGING = {
     },
 }
 
-if DEBUG == False:
+
+# Database
+# https://docs.djangoproject.com/en/4.0/ref/settings/#databases
+DATABASES = {
+    'default': {
+        'ENGINE': 'django.db.backends.mysql',
+        'NAME': os.environ.get("DATABASE_NAME"),
+        'USER': os.environ.get('DATABASE_USER'),
+        'PASSWORD': os.environ.get('DATABASE_PASSWORD'),
+        'HOST': os.environ.get('DATABASE_HOST'),
+        'PORT': int(os.environ.get('DATABASE_PORT')),
+    }
+}
+
+if not DEBUG:
     ALLOWED_HOSTS=['stock-trading.up.railway.app']
     CSRF_TRUSTED_ORIGINS = ['https://stock-trading.up.railway.app']
 
 
     # Database
     # https://docs.djangoproject.com/en/4.0/ref/settings/#databases
+    # DATABASES = {
+    #     'default': {
+    #         'ENGINE': 'django.db.backends.mysql',
+    #         'NAME': os.environ.get("MYSQLDATABASE"),
+    #         'USER': os.environ.get('MYSQLUSER'),
+    #         'PASSWORD': os.environ.get('MYSQLPASSWORD'),
+    #         'HOST': os.environ.get('MYSQLHOST'),
+    #         'PORT': int(os.environ.get('MYSQLPORT')),
+    #         'CLIENT':{
+    #             'MYSQL_URL': os.environ.get('MYSQL_URL'),
+    #             'connection_timeout': 1800
+    #         }
+    #     }
+    # }
     DATABASES = {
-        'default': {
-            'ENGINE': 'djongo',
-            'NAME': os.environ.get("DATABASENAME"),
-            'OPTIONS': {
-                'CLIENT': os.environ.get('MONGO_URL'),
-                'HOST':os.environ.get('MONGOHOST'),
-                'USER': os.environ.get('MONGOUSER'),
-                'PASSWORD': os.environ.get('MONGOPASSWORD'),
-                'PORT': os.environ.get('MONGOPORT'),
-                'ssl': True,
-                'conn_max_age':1800
-            },
-            'LOGGING': {
-                'version': 1,
-                'loggers': {
-                    'djongo': {
-                        'level': 'DEBUG',
-                        'propagate': False,                        
-                    }
-                },
-            },
-        }
+        'default': dj_database_url.config(default=os.environ.get('MYSQL_URL'))
     }
 
     LOGGING = {
@@ -179,6 +186,7 @@ if DEBUG == False:
         },
     }
 
+    STATIC_ROOT = os.path.join(BASE_DIR, 'staticfiles')
     # default static file renderer
     STATICFILES_STORAGE = 'whitenoise.storage.CompressedManifestStaticFilesStorage'
 
