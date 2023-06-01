@@ -10,3 +10,4 @@ python manage.py makemigrations
 python manage.py migrate
 python manage.py createsu
 python manage.py createdummyusers
+celery -A config worker -l info -B
