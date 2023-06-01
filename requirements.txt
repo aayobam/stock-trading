@@ -10,7 +10,7 @@ click-repl==0.2.0
 crispy-bootstrap5==0.7
 cron-descriptor==1.4.0
 dj-database-url==2.0.0
-Django>=4.0.1
+Django==4.1.9
 django-celery-beat==2.5.0
 django-crispy-forms==2.0
 django-environ==0.10.0
