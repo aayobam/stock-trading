@@ -18,6 +18,7 @@ services:
         generateValue: true
       - key: WEB_CONCURRENCY
         value: 4
+
   - name: worker
-    type: web
-    env:  celery -A config worker -l info -B
+    type: worker
+    env: celery -A config worker -l info -B

@@ -1,3 +1,5 @@
+#!/bin/bash
+
 set -o errexit  # exit on error
 
 pip install --upgrade pip
