@@ -15,7 +15,7 @@ class UserDashboardView(mixins.LoginRequiredMixin, generic.TemplateView):
         context = super().get_context_data(**kwargs)
         timestamp = [] # timestamp list: appends all the timestaps in the object's graph_data field.
         profit_loss = [] # profit/loss list: appends all the profit/loss in the object's graph_data field.
-        trade = Trade.objects.filter(trader=self.request.user).first()
+        trade = Trade.objects.filter(user=self.request.user).first()
 
         for trades in trade.graph_data:
             timestamp.append(trades["timestamp"])
@@ -45,7 +45,7 @@ class UserDashboardGraphView(mixins.LoginRequiredMixin, generic.TemplateView):
         context = super().get_context_data(**kwargs)
         timestamp = [] # timestamp list: appends all the timestaps in the object's graph_data field.
         profit_loss = [] # profit/loss list: appends all the profit/loss in the object's graph_data field.
-        trade = Trade.objects.filter(trader=self.request.user).first()
+        trade = Trade.objects.filter(user=self.request.user).first()
 
         for trades in trade.graph_data:
             timestamp.append(trades["timestamp"])
@@ -91,7 +91,7 @@ class AdminDashboardTradeListView(mixins.LoginRequiredMixin, mixins.UserPassesTe
         # Create a scatter plot with the timestamp and profit/loss data
         data = go.Scatter(x=timestamp, y=profit_loss, mode='lines+markers', name='Profit/Loss')
         layout = go.Layout(
-            title=f'Real-Time Profit/Loss for {trade_obj.trader} ${trade_obj.balance}', 
+            title=f'Real-Time Profit/Loss for {trade_obj.user} ${trade_obj.balance}', 
             xaxis=dict(title='Timestamp'),
             yaxis=dict(title='Profit/Loss')
         )
@@ -131,7 +131,7 @@ class AdminDashboardGraphView(mixins.LoginRequiredMixin, mixins.UserPassesTestMi
         # Create a scatter plot with the timestamp and profit/loss data
         data = go.Scatter(x=timestamp, y=profit_loss, mode='lines+markers', name='Profit/Loss')
         layout = go.Layout(
-            title=f'Real-Time Profit/Loss for {trade_obj.trader} ${trade_obj.balance}', 
+            title=f'Real-Time Profit/Loss for {trade_obj.user} ${trade_obj.balance}', 
             xaxis=dict(title='Timestamp'),
             yaxis=dict(title='Profit/Loss')
         )
