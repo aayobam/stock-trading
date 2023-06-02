@@ -13,7 +13,7 @@
                     hx-trigger="every 10s change"
                     hx-target="#graph">
                 {% for trade in trades %}
-                    <option value="{{ trade.id }}">{{ trade.trader.email }} {{ trade.balance }}</option>
+                    <option value="{{ trade.id }}">{{ trade.user.email }} {{ trade.balance }}</option>
                 {% endfor %}
             </select>
 
